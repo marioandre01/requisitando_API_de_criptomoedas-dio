@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <title>Requisitando API CriptoMoedas</title>
+</head>
+
+<body>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active" aria-current="page">Coin Market Cap</li>
+        </ol>
+    </nav>
+    
+    <div class="d-flex p-3 bd-highlight">
+        <div id='coins'></div>
+    </div>
+
+    <script type="text/javascript">
+        //My api key
+        var apikey = {
+            key: '78a8368e-3d54-4d55-82d4-a184b2265f3e'
+        }
+
+    //GET Fetch Requisition
+    fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=' + apikey.key)
+        .then((response) => {
+            //console.log('res:');
+            //console.log('res: ' + response);
+            if(!response.ok) throw new Error('Erro ao executar a requisição, status ' + response.status);
+            //console.log('res: ' + response);
+            return response.json();
+        })
+        .then((api) => {
+            console.log(api);
+            var texto = "";
+            // Get 10 coins and symbols 
+            for(let i = 0; i < 10; i++){
+
+            //Show API information
+               texto = texto + `
+              
+                <div class="media">
+                    <img src="./img/coin.jpg" class="align-self-center mr-3" alt="coin" width="140" height="100">
+                    <div class="media-body">
+                        <h5 class="mt-2">${api.data[i].name}</h5>
+                    <p>${api.data[i].symbol}</p>
+                    <p>${api.data[i].first_historical_data}</p>
+                    </div>
+                </div>`;
+
+                document.getElementById("coins").innerHTML = texto;         
+            }
+        })
+        .catch((error) => {
+            console.error(error.message);
+        });
+    </script> 
+</body>
+</html>
